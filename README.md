@@ -4,8 +4,6 @@ A lightweight REST API service for managing banking accounts, balances, and tran
 
 The REST API application which allows to create accounts and transactions, to find account or transactions by account id.
 
-    *-
-
 # 🧠 System Overview
 
 The service is a RESTful built with the Spring Boot framework. It handles core banking operations with a focus on data consistency and asynchronous processing.
@@ -21,18 +19,21 @@ The service is a RESTful built with the Spring Boot framework. It handles core b
 
 # 📂 Project Structure
 
-src/main/java/com/example/demo/
-├── config/              # Infrastructure configuration (RabbitMQ)
-├── controllers/         # REST API Endpoints (Account, Transaction)
-├── entities/            # Domain models and Request
-├── exceptions/          # Custom exceptions and Global Exception Handler
-├── mappers/             # MyBatis Mapper interfaces with SQL queries
-├── services/            # Business logic implementation
-└── DemoApplication.java  # Application entry point
-build.gradle
-docker-compose.yml
-Dockerfile
-README.md
+```
+.
+├── src/main/java/com/example/demo/
+│   ├── config/              # Infrastructure configuration (RabbitMQ)
+│   ├── controllers/         # REST API Endpoints (Account, Transaction)
+│   ├── entities/            # Domain models and Requests
+│   ├── exceptions/          # Custom exceptions and Global Handler
+│   ├── mappers/             # MyBatis Mapper interfaces with SQL
+│   ├── services/            # Business logic implementation
+│   └── DemoApplication.java # Application entry point
+├── build.gradle             # Build configuration
+├── docker-compose.yml       # Docker services orchestration
+├── Dockerfile               # Application container image
+└── README.md                # Project documentation
+```
 
 
 # 🐳 Deployment & Environment
@@ -41,14 +42,14 @@ The project is fully dockerized. No local installation is required except for Do
 
 ## Prerequsties
 
-- Docker Desktop(installing and openning)
+- Docker Desktop(installing and opening)
 - Docker Compose
 
 ## Quick start
 
 1. Clone the repository:
 ```
-    git clone <repo-link>
+    git clone https://github.com/denissmirno8-blip/CoreBankingSolution.git
 ```
 
 2. Launch all services:
@@ -73,12 +74,12 @@ The system provides a RESTful API to manage entities (Account, Transaction).
 
 ### Standard Operations
 #### Standard CRUD Operations & Pagination
-| Method     | Endpoint | Description |
-|:    *    *    *    *    *-|:    *    *    *    *-|:    *    *    *    *    *    *|
-| **POST**   | `/api/accounts` | Create a new account. |
-| **GET**    | `/api/accounts/{id}` | Find a specific account by its ID. |
-| **POST**    | `/api/transactions` | Create a new transaction |
-| **GET**    | `/api/transaction/{account_id}` | Retrieve a list of transactions by account ID.|
+| Method   | Endpoint                        | Description                                  |
+|:---------|:--------------------------------|:---------------------------------------------|
+| **POST** | `/api/accounts`                 | Create a new account.                       |
+| **GET**  | `/api/accounts/{id}`            | Find a specific account by its ID.          |
+| **POST** | `/api/transactions`             | Create a new transaction                    |
+| **GET**  | `/api/transaction/{account_id}` | Retrieve a list of transactions by account ID.|
 
 Create account
 - Input:
