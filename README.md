@@ -128,13 +128,54 @@ Get list of transactions
 
 # Answers about the project
 
-## Important choices
+## Design decisions and implementation details
+For Accounts, I created a dedicated AccountRequest because the input requirements differed from the output. For Transactions I combined input and output logic by using flexible constructor to avoid redundant code.
+I extracted Balance into separate class. This decoupling makes it easier to manage multiple currency balances independantly and scale the logic.
+I used Flyway for reliable schema management. All initial tables and constraints are defiend in V1__create_tables.sql.
 
-## Application scaling
+In RabbitMQ I designed a system with 1 exchange and 3 queues for account creation, transaction creation and balance updates. Controllers as producers are sending JSON payloads to the broker to decouple API responses from heavy processing.
+
+I integrated Jacoco to track testing quality. For controller testing I used MockMvc to perform integration tests on REST endpoints and ensuring correct HTTP status codes. Additionally I used lombok to reduce getters and setters.
+
+In the future I should add DELETE and PATCH methods for full resource management. And finalize the RabbiMQ consumer workers to process the background tasks.
+
+
+## Scalability & High Availability
+
+To ensure that the application can be scaled horizontally, we need follow these principles:
+
+- Stateless arhitecture: The application doesn't store data in local memory. All data is stored in Postgres, and shared state is managed by RabbitMQ.
+
+- Centralized logging: Logs need to be structured by centralized system. This is crucial for monitoring application health across multiple instances.
+
+- Message broker scalability: Using RabbitMQ allows us to decouple services. In the future we can introduce dedicated queues to prioritize high value transactions or balance the load between workers.
 
 ## Transactions estamation
 
+On my development machine, the application can consistently handle approximately 181 transactions per second (TPS) with moderate latency.
+
+### User guide
+
+If you want to estimate my application by yourself you need to do next steps.
+
+In cmd put the command to create the account (if account table is empty).
+
+```
+    curl -v -X POST http://localhost:8080/api/accounts -H "Content-Type: application/json" -d @acc_data.json
+```
+
+After that please put the next command
+
+```
+    docker run --rm -v "%cd%:/scripts" alpine/bombardier -n 5000 -c 50 -m POST -f /scripts/data.json -H "Content-Type: application/json" http://host.docker.internal:8080/api/transactions
+```
+
+And finally you can find the statistics and check the transactions estimation.
+
 ## AI explanation
+
+In this project, AI was used as a technical consultant and accelerator to ensure high-quality standards and infrastructure consistency. AI helped me in identifying compatible versions of Java 21, MyBatis, and RabbitMQ, significantly reducing time spent on resolving dependency conflicts. AI was used to research standard industry patterns for Docker configuration and REST API structure.
+
 
 ## ✉️ Contact
 Created by Denis Smirnov - (https://www.linkedin.com/in/denis-smirnov-628955221/)
